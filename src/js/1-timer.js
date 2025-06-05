@@ -37,7 +37,6 @@ const timer = {
   minutes: document.querySelector('.js-timer__minutes'),
   seconds: document.querySelector('.js-timer__seconds'),
 
-
   start(deadline) {
     this.interval = setInterval(() => {
       const diff = deadline - new Date();

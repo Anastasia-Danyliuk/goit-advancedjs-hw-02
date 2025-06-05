@@ -1,50 +1,37 @@
-const feedBackForm = document.querySelector('.js-feedback-form');
+import iziToast from 'izitoast';
+import 'izitoast/dist/css/iziToast.min.css';
 
-let formData ={};
+const form = document.querySelector('.form');
 
-
-const fillFormFields= feedBackForm => {
-  const formDataFromLS = JSON.parse(localStorage.getItem('feedback-form-state'))
-
-  if (formDataFromLS === null ) {
-    return;
-  }
-
-  formData = formDataFromLS;
-
-  const fromDataFromLSKeys = Object.keys(formDataFromLS);
-
-  for (const key of fromDataFromLSKeys) {
-    feedBackForm.elements[key].value = formDataFromLS[key];
-
-  }
-};
-
-fillFormFields(feedBackForm);
-
-const onFormFieldInput = ({ target: formField}) =>{
-  const formFieldName = formField.name;
-  const formFieldValue = formField.value;
-
-  formData[formFieldName] = formFieldValue;
-
-  localStorage.setItem('feedback-form-state', JSON.stringify(formData));
-}
-
-const onFormSubmit = event => {
+form.addEventListener('submit', event => {
   event.preventDefault();
 
-  if (!formData.message || !formData.email) {
-    alert("Fill please all fields")
-    console.log(formData);
-  } else {
-    console.log(formData);
-    localStorage.removeItem('feedback-form-state');
-    formData = {};
-    event.target.reset();
-  }
-}
+  const formData = new FormData(form);
+  const delay = Number(formData.get('delay'));
+  const state = formData.get('state');
 
-feedBackForm.addEventListener('input', onFormFieldInput);
-
-feedBackForm.addEventListener('submit', onFormSubmit);
+  const promise = new Promise((resolve, reject) => {
+    setTimeout(() => {
+      if (state === 'fulfilled') {
+        resolve(delay);
+      } else {
+        reject(delay);
+      }
+    }, delay);
+  });
+  promise
+    .then(result => {
+      iziToast.success({
+        message: `✅ Fulfilled promise in ${result}ms`,
+        position: 'topRight',
+        icon: null,
+      });
+    })
+    .catch(error => {
+      iziToast.error({
+        message: `❌ Rejected promise in ${error}ms`,
+        position: 'topRight',
+        icon: null,
+      });
+    });
+});

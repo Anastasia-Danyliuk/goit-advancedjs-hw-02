@@ -2,12 +2,10 @@ import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
 import iziToast from 'izitoast';
 import 'izitoast/dist/css/iziToast.min.css';
-import { Faroese } from 'flatpickr/dist/l10n/fo.js';
 
 let deadline = new Date('2025-06-06T00:00:00');
 let btn = document.querySelector('.start-button');
 let datetimePicker = document.querySelector('.datetime-picker');
-
 
 flatpickr('#datetime-picker', {
   enableTime: true,
